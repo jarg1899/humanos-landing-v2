@@ -1,111 +1,54 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+'use client'
+import { Menu, X } from 'lucide-react'
+import { useState } from 'react'
 
 export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const navLinks = [
-    { href: '#concept', label: 'Concepto' },
-    { href: '#pillars', label: 'Pilares' },
-    { href: '#features', label: 'Características' },
-    { href: '#faq', label: 'FAQ' },
-  ];
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-dark-900/95 backdrop-blur-lg border-b border-dark-800'
-          : 'bg-transparent'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="text-2xl font-bold text-gradient">
-            HumanOS
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-gray-300 hover:text-primary-400 transition-colors font-medium"
-              >
-                {link.label}
-              </Link>
-            ))}
+    <nav className="fixed w-full bg-white/90 backdrop-blur-md z-50 border-b border-slate-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          <div className="flex-shrink-0">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              HumanOS
+            </h1>
           </div>
-
-          {/* CTA Button */}
+          
           <div className="hidden md:block">
-            <Link href="#waitlist">
-              <button className="px-6 py-2 bg-gradient-to-r from-primary-500 to-blue-500 rounded-lg font-semibold hover:shadow-lg hover:shadow-primary-500/50 transition-all duration-300">
-                Unirme
-              </button>
-            </Link>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-dark-800 transition-colors"
-          >
-            {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
-          </button>
-        </div>
-
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden mt-4 pt-4 border-t border-dark-800"
-          >
-            <div className="flex flex-col gap-4">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-gray-300 hover:text-primary-400 transition-colors font-medium py-2"
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <Link href="#waitlist" onClick={() => setIsMobileMenuOpen(false)}>
-                <button className="w-full px-6 py-3 bg-gradient-to-r from-primary-500 to-blue-500 rounded-lg font-semibold">
-                  Unirme al Waitlist
-                </button>
-              </Link>
+            <div className="ml-10 flex items-baseline space-x-4">
+              <a href="#concepto" className="text-slate-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition">Concepto</a>
+              <a href="#pilares" className="text-slate-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition">Pilares</a>
+              <a href="#caracteristicas" className="text-slate-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition">Características</a>
+              <a href="#waitlist" className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition">
+                Únete a la Waitlist
+              </a>
             </div>
-          </motion.div>
-        )}
+          </div>
+          
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="inline-flex items-center justify-center p-2 rounded-md text-slate-700 hover:text-blue-600 focus:outline-none"
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </div>
       </div>
-    </motion.nav>
-  );
+
+      {isOpen && (
+        <div className="md:hidden">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-b border-slate-200">
+            <a href="#concepto" className="text-slate-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium">Concepto</a>
+            <a href="#pilares" className="text-slate-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium">Pilares</a>
+            <a href="#caracteristicas" className="text-slate-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium">Características</a>
+            <a href="#waitlist" className="bg-blue-600 text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700">
+              Únete a la Waitlist
+            </a>
+          </div>
+        </div>
+      )}
+    </nav>
+  )
 }
